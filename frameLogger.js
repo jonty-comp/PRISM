@@ -9,7 +9,7 @@ var logFrame = function(options, basePath) {
 	}
 
 	this.name = options.name;
-	this.logDelta = options.logDelta;
+	this.logDelta = options.logDelta || 1000;
 	this.basePath = basePath;
 	this.lastSave = 0;
 	this.today = '';

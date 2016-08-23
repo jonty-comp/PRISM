@@ -16,19 +16,20 @@ var cameras = config.cameras.map(function(configItem) {
 	logger.info('Setting up camera '+configItem.name+' at /'+configItem.name+'.jpg');
 
 	var camera = new mjpegCamera(configItem);
+	camera.description = configItem.description;
 	camera.start();
 
 	logger.debug('Started camera '+configItem.name);
 
-	var frameProcessor = new processFrame(configItem);
-	camera.pipe(frameProcessor);
+	camera.frameProcessor = new processFrame(configItem);
+	camera.pipe(camera.frameProcessor);
 
-	var frameBroker = new stream.PassThrough({objectMode: true});
-	frameProcessor.pipe(frameBroker);
+	camera.frameBroker = new stream.PassThrough({objectMode: true});
+	camera.frameProcessor.pipe(camera.frameBroker);
 
 	if(configItem.log == true) {
-		var frameLogger = new logFrame(configItem, config.logPath);
-		frameBroker.pipe(frameLogger);
+		camera.frameLogger = new logFrame(configItem, config.logPath);
+		camera.frameBroker.pipe(camera.frameLogger);
 	}
 
 	app.get('/'+configItem.name+'.jpg', function(req, res) {
@@ -40,9 +41,26 @@ var cameras = config.cameras.map(function(configItem) {
 			res.write(chunk.data);
 			next();
 		};
-		frameBroker.pipe(ws);
+		camera.frameBroker.pipe(ws);
 		logger.debug('Serving express route /'+configItem.name+'.jpg to '+req.ip);
 	});
 
 	return camera;
 });
+
+app.get('/cameras', function(req, res) {
+	var json = cameras.map(function(camera) {
+		return {
+			name: camera.name,
+			description: camera.description,
+			url: '/' + camera.name + '.jpg',
+			motion: camera.motion,
+			log: (camera.frameLogger !== undefined)
+		}
+	});
+
+	res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(json, null, 3));
+});
+
+console.log(cameras);
