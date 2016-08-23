@@ -1,0 +1,35 @@
+{
+  "name": "prism",
+  "version": "0.1.0",
+  "description": "Streaming and variable logging for MJPEG-based IP cameras",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "mjpeg-camera": "^1.7.2",
+    "nconf": "^0.8.4",
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonty-comp/PRISM.git"
+  },
+  "keywords": [
+    "mjpeg",
+    "camera",
+    "webcam",
+    "ip",
+    "camera",
+    "cctv",
+    "dvr"
+  ],
+  "author": "Jonty Sewell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jonty-comp/PRISM/issues"
+  },
+  "homepage": "https://github.com/jonty-comp/PRISM#readme"
+}
