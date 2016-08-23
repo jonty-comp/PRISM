@@ -11,6 +11,7 @@ config.cameras = [{
 	password: 'password',
 	sendImmediately: false,
 	motion: false,
+	log: true,
     logDelta: 2000
 },{
 	name: 'Cam2',
@@ -19,6 +20,7 @@ config.cameras = [{
 	password: 'password',
 	sendImmediately: false,
 	motion: false,
+	log: true,
     logDelta: 2000
 },{
 	name: 'Cam3',
@@ -27,7 +29,7 @@ config.cameras = [{
 	password: 'password',
 	sendImmediately: false,
 	motion: false,
-    logDelta: 5000
+	log: false
 }];
 
 module.exports = config;

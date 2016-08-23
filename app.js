@@ -26,8 +26,10 @@ var cameras = config.cameras.map(function(configItem) {
 	var frameBroker = new stream.PassThrough({objectMode: true});
 	frameProcessor.pipe(frameBroker);
 
-	var frameLogger = new logFrame(configItem, config.logPath);
-	frameBroker.pipe(frameLogger);
+	if(configItem.log == true) {
+		var frameLogger = new logFrame(configItem, config.logPath);
+		frameBroker.pipe(frameLogger);
+	}
 
 	app.get('/'+configItem.name+'.jpg', function(req, res) {
 		res.setHeader('Content-Type', 'multipart/x-mixed-replace; boundary=--myboundary');
