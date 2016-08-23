@@ -64,5 +64,3 @@ app.get('/cameras', function(req, res) {
 	res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(json, null, 3));
 });
-
-console.log(cameras);
