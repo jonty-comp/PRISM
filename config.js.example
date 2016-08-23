@@ -1,0 +1,33 @@
+var config = {};
+
+config.web_port = 8080;
+
+config.logPath = '/tmp/cameras';
+
+config.cameras = [{
+	name: 'Cam1',
+	url: 'http://192.168.1.221/mjpeg/stream.cgi?chn=0',
+	user: 'admin',
+	password: 'password',
+	sendImmediately: false,
+	motion: false,
+    logDelta: 2000
+},{
+	name: 'Cam2',
+	url: 'http://192.168.1.222/mjpeg/stream.cgi?chn=0',
+	user: 'admin',
+	password: 'password',
+	sendImmediately: false,
+	motion: false,
+    logDelta: 2000
+},{
+	name: 'Cam3',
+	url: 'http://192.168.1.223/videostream.cgi',
+	user: 'admin',
+	password: 'password',
+	sendImmediately: false,
+	motion: false,
+    logDelta: 5000
+}];
+
+module.exports = config;
