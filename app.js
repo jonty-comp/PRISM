@@ -9,10 +9,10 @@ var logFrame = require('./frameLogger');
 var config = require('./config');
 
 logger.info('Starting webcam logger / streamer');
-logger.level = 'info';
+logger.level = config.logLevel;
 
 var app = express();
-app.listen(config.web_port);
+app.listen(config.webPort);
 
 var cameras = config.cameras.map(function(configItem) {
 	logger.info('Setting up camera '+configItem.name+' at /'+configItem.name+'.jpg');

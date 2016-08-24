@@ -1,6 +1,8 @@
 var config = {};
 
-config.web_port = 8080;
+config.webPort = 8080;
+
+config.logLevel = 'info'
 
 config.logPath = '/tmp/cameras';
 
