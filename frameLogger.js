@@ -48,7 +48,7 @@ logFrame.prototype.getFile = function(timestamp, callback) {
 
 logFrame.prototype._write = function(chunk, enc, next) {
 	if(chunk.time >= (this.lastSave + this.logDelta)) {
-		logger.debug('Saving image for '+this.name);
+		logger.debug('Saving image for '+this.name+' at '+chunk.time);
 
 		this.getFile(chunk.time, function(file) {
 			file.write(chunk.data);
@@ -56,6 +56,7 @@ logFrame.prototype._write = function(chunk, enc, next) {
 
 		this.lastSave = chunk.time;
 	}
+	
 	next();
 }
 

@@ -4,8 +4,10 @@ var logger = require('winston');
 var express = require('express');
 var stream = require('stream');
 var mjpegCamera = require('mjpeg-camera');
+
 var processFrame = require('./frameProcessor');
 var logFrame = require('./frameLogger');
+var streamFrame = require('./frameStreamer');
 var config = require('./config');
 
 logger.info('Starting webcam logger / streamer');
@@ -26,24 +28,19 @@ var cameras = config.cameras.map(function(configItem) {
 	camera.frameProcessor = new processFrame(configItem);
 	camera.pipe(camera.frameProcessor);
 
-	camera.frameBroker = new stream.PassThrough({objectMode: true});
-	camera.frameProcessor.pipe(camera.frameBroker);
-
 	if(configItem.log == true) {
 		camera.frameLogger = new logFrame(configItem, config.logPath);
-		camera.frameBroker.pipe(camera.frameLogger);
+		camera.frameProcessor.pipe(camera.frameLogger);
 	}
+
+	camera.frameStreamer = new streamFrame(configItem);
+	camera.frameProcessor.pipe(camera.frameStreamer);
 
 	app.get('/'+configItem.name+'.jpg', function(req, res) {
 		res.setHeader('Content-Type', 'multipart/x-mixed-replace; boundary=--myboundary');
 
-		var ws = new stream.Writable({objectMode: true});
-		ws._write = function(chunk, enc, next) {
-			res.write('--myboundary\nContent-Type: image/jpeg\nContent-Length: '+ chunk.data.length + '\n\n');
-			res.write(chunk.data);
-			next();
-		};
-		camera.frameBroker.pipe(ws);
+		camera.frameStreamer.pipe(res);
+
 		logger.debug('Serving express route /'+configItem.name+'.jpg to '+req.ip);
 	});
 
