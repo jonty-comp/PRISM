@@ -1,6 +1,7 @@
 var stream = require('stream');
 var util = require('util');
 var logger = require('winston');
+var moment = require('moment');
 var fs = require('fs');
 
 var logFrame = function(options, basePath) {
@@ -24,8 +25,7 @@ var logFrame = function(options, basePath) {
 util.inherits(logFrame, stream.Writable);
 
 logFrame.prototype.getFile = function(timestamp, callback) {
-	var dateTime = new Date(timestamp);
-	var dateString = dateTime.getFullYear() + '-' + (dateTime.getMonth()+1) + '-' + dateTime.getDate();
+	var dateString = moment().format('YYYY-MM-DD');
 
 	if(dateString == this.today && this.writeStream) {
 		callback(this.writeStream);
